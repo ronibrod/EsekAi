@@ -4,21 +4,8 @@ from bson.json_util import dumps
 from datetime import datetime
 from ..neuran.get_LSTM_output_data import get_LSTM_output_data
 
-user_name = 'lizCafeteria'
-product = 'Espresso'
-
-get_lstm_sales_bp = Blueprint('get_lstm_sales', __name__)
-@get_lstm_sales_bp.route('/getLstmSales', methods=['GET'])
-def get_sales():
-  requestData = json.loads(request.args.to_dict()['query'])
-  print(requestData)
+def handle_get_sales(request_data):
+  user_name = request_data['userName']
   
-  list_of_sales = get_LSTM_output_data(user_name, product)
-  for sale in list_of_sales:
-    if '_id' in sale:
-      sale['_id'] = str(sale['_id'])
-  
-  print("MongoDB server is connected.")
-  print(len(list_of_sales))
-  print("MongoDB server is connected.")
-  return jsonify(list_of_sales)
+  list_of_sales = get_LSTM_output_data(user_name, request_data)
+  return list_of_sales

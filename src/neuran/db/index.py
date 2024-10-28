@@ -1,7 +1,5 @@
 from pymongo import MongoClient
 
-# user_name = 'lizCafeteria'
-
 # MongoDB configuration
 client = MongoClient('localhost', 27017)
 
@@ -13,4 +11,10 @@ def get_sales_collection(user_name):
 
 def get_days_collection(user_name):
   return client[user_name]['day']
+
+def get_products_collection(user_name):
+  return client[user_name]['product']
+
+def get_users_collection():
+    return client['users']['companies']
   

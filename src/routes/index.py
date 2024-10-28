@@ -1,16 +1,15 @@
-from flask import Flask
-from flask_cors import CORS
-from .get_sales import get_sales_bp
-from .get_all_products import get_all_products_bp
+import json
+from flask import Blueprint, jsonify, request
+from .get_lstm_sales import handle_get_sales
 
-def create_app():
-  app = Flask(__name__)
-  CORS(app)
-  app.register_blueprint(get_sales_bp)
-  app.register_blueprint(get_all_products_bp)
-  return app
+routes = Blueprint('routes', __name__)
 
-app = create_app()
+@routes.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "OK"}), 200
 
-if __name__ == '__main__':
-  app.run(debug=True)
+@routes.route('/getLstmSales', methods=['GET'])
+def get_sales():
+    request_data = json.loads(request.args.to_dict()['query'])
+    response = handle_get_sales(request_data)
+    return jsonify(response)

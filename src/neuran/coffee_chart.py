@@ -11,9 +11,7 @@ from .db.sales import get_list_of_sales, get_sorted_sale_data, get_first_and_las
 from .db.products import get_list_of_products
 from .db.days import get_list_of_days
 
-user_name = 'lizCafeteria'
-# products_for_input = ['Espresso', 'Cappuccino']
-# products_for_output = [{'name': 'Espresso'}, {'name': 'Cappuccino'}]
+user_name = 'coffee_nyc'
 time_division = 'daily'
 
 first_date, last_date = get_first_and_last_sale_dates(user_name)
@@ -25,7 +23,8 @@ days_array = get_list_of_days(user_name, first_date, last_date)
 
 days_by_products = get_input_data(days_array, products_data).tolist()
 days_by_products = sum(days_by_products, [])
-print(len(days_by_products))
+# print(len(days_by_products))
+# print(days_by_products[:2])
 sales_sum = []
 total_sum = []
 for product in products_data:
@@ -37,7 +36,8 @@ for product in products_data:
 total = np.sum(total_sum, axis=0)
     
     
-print(len(sales_sum))
+# print(len(sales_sum))
+# print(len(total_sum))
 
 for index, day in enumerate(days_by_products):
     day.append(sales_sum[index])
@@ -68,19 +68,19 @@ days_data.bfill(inplace=True)
 ##########################################################################
 # print(days_data.head())
 # print(days_data.info())
-# print(days_data['sales_sum'].value_counts())
+# print(days_data['total'].value_counts())
 # print(days_data[days_data['rain'] > 60]['rain'].count())
-# print(days_data['total'].describe())
+# print(days_data['max_temperature'].describe())
 # print(days_data.describe(include='all'))
 # print(days_data['min_temperature'].isnull().sum())
 # print(days_data.isnull().sum())
 
 # print(days_data.duplicated().sum())
 # print(days_data[days_data.duplicated()])
-# print(days_data.weekday.unique())
-# print(len(days_data.max_temperature.unique()))
+# print(days_data.product_index.unique())
+# print(len(days_data.product_index.unique()))
 
-# print(sum(days_data.min_temperature<10))
+# print(sum(days_data.min_temperature < 0) / 29)
 # Q1 = np.percentile(days_data['sales_sum'], 25)
 # Q3 = np.percentile(days_data['sales_sum'], 75)
 # IQR = Q3 - Q1
@@ -88,7 +88,7 @@ days_data.bfill(inplace=True)
 # print(Q3)
 # print(IQR)
 # print(len(days_data[(days_data['sales_sum'] < Q1 - 1.5 * IQR) | (days_data['sales_sum'] > Q3 + 1.5 * IQR)].index))
-# sns.boxenplot(days_data.sales_sum)
+# sns.boxenplot(days_data.total)
 
 # z_score = (days_data['sales_sum'] - days_data['sales_sum'].mean()) / days_data['sales_sum'].std()
 # outliers = abs(z_score) > 3
@@ -101,7 +101,7 @@ days_data.bfill(inplace=True)
 # da = pd.cut(days_data['max_temperature'], bins, labels=labels)
 # print(da.unique())
 
-# ct1 = pd.crosstab(days_data['sales_sum'], days_data['vacation'])
+# ct1 = pd.crosstab(days_data['total'], days_data['vacation'])
 # ct1.plot(kind='bar', figsize=(14, 5))
 # ct2 = days_data['min_temperature'].value_counts().plot(kind='bar')
 
@@ -124,7 +124,7 @@ days_data.bfill(inplace=True)
 # ax.scatter3D(xdata, ydata, zdata)
 # ax.scatter3D(xdata, ydata, zdata, c=zdata, depthshade=False)
 
-# sns.pairplot(days_data[['min_temperature', 'max_temperature', 'year', 'total']])
+# sns.pairplot(days_data[['min_temperature', 'max_temperature', 'total']])
 
 
 # plt.scatter(x=days_data['min_temperature'],y=days_data['total'],c='r',marker='s',label='min_temperature')
@@ -141,15 +141,15 @@ y = days_data['total']  # Target
 model = linear_model.LinearRegression(fit_intercept=False )
 model.fit(X, y)
 
-plt.scatter(days_data[ipd], days_data['total'], c='k', marker='*', label='ipd')
-plt.plot(days_data[ipd], model.predict(X), color='blue', linewidth=3, label='Regression line')
+# plt.scatter(days_data[ipd], days_data['total'], c='k', marker='*', label='ipd')
+# plt.plot(days_data[ipd], model.predict(X), color='blue', linewidth=3, label='Regression line')
 
-print("b1:",model.coef_)
-print("b0:",model.intercept_)
+# print("b1:",model.coef_)
+# print("b0:",model.intercept_)
 
-plt.xlabel('IPD')
-plt.ylabel('Total')
-plt.legend()
+# plt.xlabel('IPD')
+# plt.ylabel('Total')
+# plt.legend()
 
 def sse(Y, Y_HAT):  
     sse = sum([(y - y_hat)**2 for y, y_hat in zip(Y, Y_HAT)])
@@ -160,10 +160,10 @@ Y_HAT = model.predict(X).flatten()
 mse = mean_squared_error(Y, Y_HAT)
 SSE = mse * len(Y)
 
-print("SSE:", SSE / len(days_data))
+# print("SSE:", SSE / len(days_data))
 
 r2 = r2_score(Y, Y_HAT)
-print("R^2 Score:", r2)
+# print("R^2 Score:", r2)
 
 
 
@@ -174,7 +174,7 @@ print("R^2 Score:", r2)
 
 
 
-plt.show()
+# plt.show()
 ##########################################################################
 def show_in_chart():
     fig = plt.figure(figsize=(14, 5))
